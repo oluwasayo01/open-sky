@@ -34,6 +34,7 @@ const Dashboard = ({ location }) => {
     if (startDate && endDate && airport) {
       setArrivalLoading(true);
       setDepartureLoading(true);
+      setCred(cred);
       client
         .getArrivals(cred.username, cred.password, airport, startDate, endDate)
         .then((response) => {
