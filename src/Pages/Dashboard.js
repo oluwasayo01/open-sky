@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Form, Container, Button, Row, Col, Spinner } from "react-bootstrap";
+import {
+  Form,
+  Container,
+  Button,
+  Row,
+  Col,
+  Spinner,
+  Table,
+} from "react-bootstrap";
 import client from "../Client";
 import DatePicker from "react-datepicker";
 import { toast, ToastContainer } from "react-toastify";
@@ -46,7 +54,7 @@ const Dashboard = ({ location }) => {
         })
         .catch((err) => {
           toast.error("An error occured. Try again");
-          setArrivalLoading(false)
+          setArrivalLoading(false);
         });
       client
         .getDepartures(
@@ -62,7 +70,7 @@ const Dashboard = ({ location }) => {
           setDepartureLoading(false);
         })
         .catch((err) => {
-          setDepartureLoading(false)
+          setDepartureLoading(false);
         });
     } else {
       toast.error("Supply all values");
@@ -128,29 +136,49 @@ const Dashboard = ({ location }) => {
             </Col>
           </Row>
         </Form>
-        <div className="d-flex justify-content-around mt-5 pr-5">
-          <h1 className="border-right border-primary text-align-center">
-            {airport}
-          </h1>
-          <h1 className="border-right border-primary pr-5">
-            {startDate && dayjs(startDate).format("DD-MMM-YYYY hh:mm A")}-{" "}
-            {endDate && dayjs(endDate).format("DD-MMM-YYYY hh:mm A")}
-          </h1>
-          <h2 className="border-right border-primary pr-5">
-            {arrivalLoading ? (
-              <Spinner animation="border" variant="primary" />
-            ) : (
-              arrivalsNumber
-            )}
-          </h2>
-          <h2 className="border-right border-primary pr-5">
-            {departureLoading ? (
-              <Spinner animation="border" variant="primary" />
-            ) : (
-              departuresNumber
-            )}
-          </h2>
-        </div>
+
+        <Table striped bordered hover className="mt-5">
+          <thead>
+            <tr>
+              <th>Airport</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Arrivals</th>
+              <th>Departures</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{airport}</td>
+              <td>
+                <p>
+                  {startDate && dayjs(startDate).format("DD-MMM-YYYY hh:mm A")}
+                </p>
+              </td>
+              <td>
+                <p>{endDate && dayjs(endDate).format("DD-MMM-YYYY hh:mm A")}</p>
+              </td>
+              <td>
+                <p>
+                  {arrivalLoading ? (
+                    <Spinner animation="border" variant="primary" />
+                  ) : (
+                    arrivalsNumber
+                  )}
+                </p>
+              </td>
+              <td>
+                <p>
+                  {departureLoading ? (
+                    <Spinner animation="border" variant="primary" />
+                  ) : (
+                    departuresNumber
+                  )}
+                </p>
+              </td>
+            </tr>
+          </tbody>
+        </Table>
       </Container>
       <ToastContainer />
     </>
