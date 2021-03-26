@@ -11,31 +11,35 @@ import {
 import client from "../Client";
 import DatePicker from "react-datepicker";
 import { toast, ToastContainer } from "react-toastify";
+import { PieChart, Pie, Tooltip } from "recharts";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-toastify/dist/ReactToastify.css";
 
 const dayjs = require("dayjs");
 
 const Dashboard = ({ location }) => {
-  const [arrivalsNumber, setArrivalsNumber] = useState(0);
-  const [departuresNumber, setDeparturesNumber] = useState(0);
+  const [arrivalsNumber, setArrivalsNumber] = useState();
+  const [departuresNumber, setDeparturesNumber] = useState();
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [cred, setCred] = useState(location.state);
   const [airport, setAirport] = useState();
   const [arrivalLoading, setArrivalLoading] = useState(false);
   const [departureLoading, setDepartureLoading] = useState(false);
+  const [arrivalReady, setArrivalReady] = useState(false);
+  const [departureReady, setDepartureReady] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const difference = endDate - startDate;
     const days = new Date(endDate - startDate).getDate();
-    if (days > 7) {
-      toast.error("Supply date within a range of 7 days");
+    if (difference < 0) {
+      toast.error("end date must be after start date");
       return;
     }
 
-    if (days < 0) {
-      toast.error("end date must be after start date");
+    if (days > 7) {
+      toast.error("Supply date within a range of 7 days");
       return;
     }
 
@@ -51,6 +55,7 @@ const Dashboard = ({ location }) => {
         .then((resp) => {
           setArrivalsNumber(resp.length);
           setArrivalLoading(false);
+          setArrivalReady(true);
         })
         .catch((err) => {
           toast.error("An error occured. Try again");
@@ -68,6 +73,7 @@ const Dashboard = ({ location }) => {
         .then((resp) => {
           setDeparturesNumber(resp.length);
           setDepartureLoading(false);
+          setDepartureReady(true);
         })
         .catch((err) => {
           setDepartureLoading(false);
@@ -86,6 +92,17 @@ const Dashboard = ({ location }) => {
   useEffect(() => {
     toast.success("Your login details will be used for OpenSky Authentication");
   }, []);
+
+  const data = [
+    {
+      name: "Arrivals",
+      value: arrivalsNumber,
+    },
+    {
+      name: "Departures",
+      value: departuresNumber,
+    },
+  ];
 
   return (
     <>
@@ -117,6 +134,8 @@ const Dashboard = ({ location }) => {
                   timeIntervals={5}
                   timeCaption="Time"
                   dateFormat="MMM dd, yyyy hh:mm aa"
+                  minDate={new Date("1970-01-01")}
+                  maxDate={new Date()}
                 />
                 <DatePicker
                   selected={endDate}
@@ -128,6 +147,8 @@ const Dashboard = ({ location }) => {
                   timeIntervals={5}
                   timeCaption="Time"
                   dateFormat="MMM dd, yyyy hh:mm aa"
+                  minDate={new Date("1970-01-01")}
+                  maxDate={new Date()}
                 />
               </div>
               <Button className="mt-5 mr-5" type="submit" block>
@@ -142,7 +163,9 @@ const Dashboard = ({ location }) => {
             <tr>
               <th>Airport</th>
               <th>Start Date</th>
+              <th>Start Time</th>
               <th>End Date</th>
+              <th>End Time</th>
               <th>Arrivals</th>
               <th>Departures</th>
             </tr>
@@ -151,35 +174,53 @@ const Dashboard = ({ location }) => {
             <tr>
               <td>{airport}</td>
               <td>
-                <p>
-                  {startDate && dayjs(startDate).format("DD-MMM-YYYY hh:mm A")}
-                </p>
+                <p>{startDate && dayjs(startDate).format("DD-MMM-YYYY")}</p>
               </td>
               <td>
-                <p>{endDate && dayjs(endDate).format("DD-MMM-YYYY hh:mm A")}</p>
+                <p>{startDate && dayjs(startDate).format("hh:mm A")}</p>
               </td>
               <td>
-                <p>
-                  {arrivalLoading ? (
-                    <Spinner animation="border" variant="primary" />
-                  ) : (
-                    arrivalsNumber
-                  )}
-                </p>
+                <p>{endDate && dayjs(endDate).format("DD-MMM-YYYY")}</p>
               </td>
               <td>
-                <p>
-                  {departureLoading ? (
-                    <Spinner animation="border" variant="primary" />
-                  ) : (
-                    departuresNumber
-                  )}
-                </p>
+                <p>{endDate && dayjs(endDate).format("hh:mm A")}</p>
+              </td>
+              <td>
+                {arrivalLoading ? (
+                  <Spinner animation="border" variant="primary" />
+                ) : (
+                  <p>{arrivalsNumber}</p>
+                )}
+              </td>
+              <td>
+                {departureLoading ? (
+                  <Spinner animation="border" variant="primary" />
+                ) : (
+                  <p>{departuresNumber}</p>
+                )}
               </td>
             </tr>
           </tbody>
         </Table>
       </Container>
+      <Container className="d-flex justify-content-center">
+        {arrivalReady && departureReady && (
+          <PieChart width={750} height={300}>
+            <Pie
+              data={data}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              innerRadius={80}
+              fill="blue"
+              label
+            />
+            <Tooltip />
+          </PieChart>
+        )}
+      </Container>
+
       <ToastContainer />
     </>
   );
