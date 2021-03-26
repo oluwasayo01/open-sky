@@ -27,11 +27,11 @@ const SignIn = ({history}) => {
   return (
     <Container>
       <Row className="justify-content-center">
-        <Col lg={5}>
+        <Col lg={5} md={5} xl={4} my={5}>
           <h1 className="text-center">Sign in</h1>
           <Form onSubmit={handleSubmit}>
             <Form.Group controlId="formBasicEmail">
-              <Form.Label>Email Address</Form.Label>
+              <Form.Label>Username</Form.Label>
               <Form.Control type="text" placeholder="username" name="username" onChange={handleChange}/>
             </Form.Group>
 
@@ -39,10 +39,6 @@ const SignIn = ({history}) => {
               <Row>
                 <Col>
                   <Form.Label>Password</Form.Label>
-                </Col>
-
-                <Col lg="auto">
-                  <Form.Label>Forgot Password?</Form.Label>
                 </Col>
               </Row>
               <InputGroup>

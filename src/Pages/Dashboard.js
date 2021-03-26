@@ -84,7 +84,7 @@ const Dashboard = ({ location }) => {
       <Container>
         <Form onSubmit={handleSubmit}>
           <Row className="justify-content-center">
-            <Col lg={5} md={4}>
+            <Col lg={5} md={5} xl={4} my={5}>
               <Form.Group controlId="formBasicText">
                 <Form.Label>Airport Code</Form.Label>
                 <Form.Control
@@ -122,7 +122,7 @@ const Dashboard = ({ location }) => {
                   dateFormat="MMM dd, yyyy hh:mm aa"
                 />
               </div>
-              <Button className="mt-5 mr-5" type="submit">
+              <Button className="mt-5 mr-5" type="submit" block>
                 Get Info
               </Button>
             </Col>
