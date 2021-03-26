@@ -33,6 +33,7 @@ const Dashboard = ({ location }) => {
     e.preventDefault();
     const difference = endDate - startDate;
     const days = new Date(endDate - startDate).getDate();
+    
     if (difference < 0) {
       toast.error("end date must be after start date");
       return;
