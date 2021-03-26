@@ -4,10 +4,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-
-
-
-
 const SignIn = ({history}) => {
   const [data, setData] = useState({username: "", password: ""})
 
@@ -42,7 +38,6 @@ const SignIn = ({history}) => {
                 </Col>
               </Row>
               <InputGroup>
-            
                 <Form.Control
                   type="password"
                   placeholder="Enter your password"
