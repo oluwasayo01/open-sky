@@ -33,7 +33,7 @@ const Dashboard = ({ location }) => {
     e.preventDefault();
     const difference = endDate - startDate;
     const days = new Date(endDate - startDate).getDate();
-    
+
     if (difference < 0) {
       toast.error("end date must be after start date");
       return;
@@ -45,6 +45,8 @@ const Dashboard = ({ location }) => {
     }
 
     if (startDate && endDate && airport) {
+      setArrivalReady(false)
+      setDepartureReady(false)
       setArrivalLoading(true);
       setDepartureLoading(true);
       setCred(cred);
