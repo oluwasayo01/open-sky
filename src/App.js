@@ -9,7 +9,7 @@ function App() {
     <div>
       <Router>
         <Switch>
-          <Route exact path='/' component={SignIn}/>
+          <Route path='/open-sky' component={SignIn}/>
           <Route path='/dashboard' component={Dashboard} />
         </Switch>
       </Router>
