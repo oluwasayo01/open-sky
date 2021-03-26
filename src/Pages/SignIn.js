@@ -17,7 +17,6 @@ const SignIn = ({history}) => {
         pathname: '/dashboard',
         state: data
     })
-    console.log(data)
   }
 
   function handleChange(event){

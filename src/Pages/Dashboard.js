@@ -46,6 +46,7 @@ const Dashboard = ({ location }) => {
         })
         .catch((err) => {
           toast.error("An error occured. Try again");
+          setArrivalLoading(false)
         });
       client
         .getDepartures(
@@ -60,7 +61,9 @@ const Dashboard = ({ location }) => {
           setDeparturesNumber(resp.length);
           setDepartureLoading(false);
         })
-        .catch((err) => {});
+        .catch((err) => {
+          setDepartureLoading(false)
+        });
     } else {
       toast.error("Supply all values");
       return;
